@@ -42,7 +42,7 @@ async function pesquisarSite(pergunta) {
 Resultado ${index + 1}:
 Título: ${item.title}
 Link: ${item.link}
-Resumo: ${item.snippet}
+Resumo: ${item.snippet || "Conteúdo encontrado no site oficial."}
 
 `;
 
