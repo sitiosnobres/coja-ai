@@ -84,14 +84,15 @@ for (const pagina of paginas) {
 
         if (htmlNormalizado.includes(perguntaNormalizada)) {
 
-            resultados += `
+    resultados += `
 Foi encontrada referência a "${pergunta}" na página:
 ${pagina}
 
 `;
 
-            encontrou = true;
-        }
+    encontrou = true;
+
+}
 
     } catch (e) {
 
