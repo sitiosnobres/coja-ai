@@ -17,7 +17,7 @@ async function pesquisarSite(pergunta) {
 
     try {
 
-        const url = `https://www.googleapis.com/customsearch/v1?q=site:cojaebarrildealva.pt ${encodeURIComponent(pergunta)}&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
+        const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(pergunta + " site:cojaebarrildealva.pt")}&num=5&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
 
         const response = await fetch(url);
 
