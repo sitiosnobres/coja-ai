@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const OpenAI = require("openai");
 const fetch = require("node-fetch");
+
 const app = express();
 
 app.use(cors());
@@ -13,64 +14,80 @@ app.use(express.static("public"));
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
+
 async function pesquisarSite(pergunta) {
 
     try {
 
+        // PESQUISA GOOGLE CUSTOM SEARCH
         const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(pergunta)}&num=5&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
 
         const response = await fetch(url);
 
         const data = await response.json();
-      console.log(JSON.stringify(data, null, 2));
 
-        if (!data.items || data.items.length === 0) {
-
-    const respostaAlternativa = await fetch(
-        "https://cojaebarrildealva.pt"
-    );
-
-    const html = await respostaAlternativa.text();
-
-    const htmlNormalizado = html
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-
-const perguntaNormalizada = pergunta
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-
-if (htmlNormalizado.includes(perguntaNormalizada)) {
-
-        return `Foi encontrada referência a "${pergunta}" no site oficial da União de Freguesias de Coja e Barril de Alva.`;
-    }
-
-    return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
-}
+        console.log("RESULTADOS GOOGLE:");
+        console.log(JSON.stringify(data, null, 2));
 
         let resultados = "";
 
-        data.items.slice(0, 3).forEach((item, index) => {
+        // RESULTADOS GOOGLE
+        if (data.items && data.items.length > 0) {
 
-            resultados += `
+            data.items.slice(0, 3).forEach((item, index) => {
+
+                resultados += `
 Resultado ${index + 1}:
-Título: ${item.title}
-Link HTML: <a href="${item.link}" target="_blank">${item.link}</a>
-Resumo: ${item.snippet}
 
-Abrir página:
-<a href="${item.link}" target="_blank">${item.link}</a>
+Título: ${item.title}
+
+Link:
+${item.link}
+
+Resumo:
+${item.snippet}
 
 `;
 
-        });
+            });
+
+        }
+
+        // FALLBACK HTML DO SITE
+        const respostaSite = await fetch("https://cojaebarrildealva.pt");
+
+        const html = await respostaSite.text();
+
+        const htmlNormalizado = html
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        const perguntaNormalizada = pergunta
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        // PROCURA DIRETA NO HTML
+        if (htmlNormalizado.includes(perguntaNormalizada)) {
+
+            resultados += `
+Foi encontrada referência direta a "${pergunta}" no conteúdo do site oficial.
+`;
+
+        }
+
+        // SEM RESULTADOS
+        if (!resultados.trim()) {
+
+            return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
+        }
 
         return resultados;
 
     } catch (erro) {
 
+        console.error("ERRO AO PESQUISAR SITE:");
         console.error(erro);
 
         return "Erro ao pesquisar o site.";
@@ -79,69 +96,78 @@ Abrir página:
 
 app.post("/chat", async (req, res) => {
 
-  try {
+    try {
 
-    const message = req.body.message;
-    const resultadosSite = await pesquisarSite(message);
+        const message = req.body.message;
 
-    console.log("Mensagem recebida:", message);
+        console.log("Mensagem recebida:", message);
 
-    const response = await client.chat.completions.create({
+        const resultadosSite = await pesquisarSite(message);
 
-      model: "gpt-3.5-turbo",
+        console.log("RESULTADOS FINAIS:");
+        console.log(resultadosSite);
 
-      messages: [
-        {
-          role: "system",
-          content: `És o assistente virtual oficial da União de Freguesias de Coja e Barril de Alva.
+        const response = await client.chat.completions.create({
+
+            model: "gpt-3.5-turbo",
+
+            messages: [
+
+                {
+                    role: "system",
+                    content: `
+És o assistente virtual oficial da União de Freguesias de Coja e Barril de Alva.
 
 Responde sempre em português de Portugal.
 
-Usa os resultados encontrados no site oficial para responder.
+Usa SEMPRE os resultados encontrados no site oficial.
 
-Se existirem resultados encontrados, responde SEMPRE com base nesses resultados.
+Se existirem resultados encontrados, responde obrigatoriamente com base nesses resultados.
 
 Nunca digas que não encontraste informação se existirem resultados.
 
-Resume os conteúdos encontrados de forma clara e útil.
+Resume os conteúdos encontrados de forma clara, útil e amigável.
 
-Se houver links relevantes, menciona-os.
+Se existirem links relevantes, menciona-os.
 
-Se realmente não existirem resultados, então informa que não foi encontrada informação oficial.
+Se realmente não existirem resultados, então informa claramente que não foi encontrada informação oficial disponível.
 
 Resultados encontrados no site:
 
 ${resultadosSite}
 `
-`
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ]
+                },
 
-    });
+                {
+                    role: "user",
+                    content: message
+                }
 
-    const reply = response.choices[0].message.content;
+            ]
 
-    res.json({
-      reply: reply
-    });
+        });
 
-  } catch (error) {
+        const reply = response.choices[0].message.content;
 
-    console.log("ERRO:");
-    console.log(error);
+        res.json({
+            reply: reply
+        });
 
-    res.status(500).json({
-      reply: "Erro no servidor."
-    });
+    } catch (error) {
 
-  }
+        console.log("ERRO NO SERVIDOR:");
+        console.log(error);
+
+        res.status(500).json({
+            reply: "Erro no servidor."
+        });
+
+    }
 
 });
 
 app.listen(3000, () => {
-  console.log("Servidor IA ativo na porta 3000");
+
+    console.log("Servidor IA ativo na porta 3000");
+
 });
