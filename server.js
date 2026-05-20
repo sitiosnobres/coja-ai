@@ -81,15 +81,22 @@ app.post("/chat", async (req, res) => {
 
 Responde sempre em português de Portugal.
 
-Usa prioritariamente os conteúdos encontrados no site oficial.
+Usa os resultados encontrados no site oficial para responder.
 
-Se não encontrares informação no site, diz claramente que não encontraste informação oficial disponível.
+Se existirem resultados encontrados, responde SEMPRE com base nesses resultados.
 
-Nunca inventes respostas.
+Nunca digas que não encontraste informação se existirem resultados.
+
+Resume os conteúdos encontrados de forma clara e útil.
+
+Se houver links relevantes, menciona-os.
+
+Se realmente não existirem resultados, então informa que não foi encontrada informação oficial.
 
 Resultados encontrados no site:
 
 ${resultadosSite}
+`
 `
         },
         {
