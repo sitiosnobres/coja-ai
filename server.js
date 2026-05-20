@@ -22,6 +22,7 @@ async function pesquisarSite(pergunta) {
         const response = await fetch(url);
 
         const data = await response.json();
+      console.log(JSON.stringify(data, null, 2));
 
         if (!data.items || data.items.length === 0) {
 
