@@ -32,7 +32,17 @@ async function pesquisarSite(pergunta) {
 
     const html = await respostaAlternativa.text();
 
-    if (html.toLowerCase().includes(pergunta.toLowerCase())) {
+    const htmlNormalizado = html
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+const perguntaNormalizada = pergunta
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+if (htmlNormalizado.includes(perguntaNormalizada)) {
 
         return `Foi encontrada referência a "${pergunta}" no site oficial da União de Freguesias de Coja e Barril de Alva.`;
     }
