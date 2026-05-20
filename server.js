@@ -54,7 +54,21 @@ ${item.snippet}
         }
 
         // FALLBACK HTML DO SITE
-        const respostaSite = await fetch("https://cojaebarrildealva.pt");
+        const paginas = [
+    "https://cojaebarrildealva.pt",
+    "https://cojaebarrildealva.pt/category/noticias/",
+    "https://cojaebarrildealva.pt/publicacoes-oficiais/",
+    "https://cojaebarrildealva.pt/espaco-do-cidadao/",
+    "https://cojaebarrildealva.pt/secretaria-online/"
+];
+
+let encontrou = false;
+
+for (const pagina of paginas) {
+
+    try {
+
+        const respostaSite = await fetch(pagina);
 
         const html = await respostaSite.text();
 
@@ -68,14 +82,38 @@ ${item.snippet}
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "");
 
-        // PROCURA DIRETA NO HTML
         if (htmlNormalizado.includes(perguntaNormalizada)) {
 
             resultados += `
-Foi encontrada referência direta a "${pergunta}" no conteúdo do site oficial.
+Foi encontrada referência a "${pergunta}" na página:
+${pagina}
+
 `;
 
+            encontrou = true;
         }
+
+    } catch (e) {
+
+        console.log("Erro ao verificar página:", pagina);
+
+    }
+
+}
+
+        const html = await respostaSite.text();
+
+        const htmlNormalizado = html
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        const perguntaNormalizada = pergunta
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+       
 
         // SEM RESULTADOS
         if (!resultados.trim()) {
