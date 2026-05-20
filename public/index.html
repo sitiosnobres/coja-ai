@@ -188,9 +188,14 @@ async function sendMessage(){
 
         const data = await response.json();
 
-        messages.innerHTML += `
-            <div class="bot-message">${data.reply}</div>
-        `;
+        const respostaFormatada = data.reply.replace(
+    /(https?:\/\/[^\s]+)/g,
+    '<a href="$1" target="_blank">$1</a>'
+);
+
+messages.innerHTML += `
+    <div class="bot-message">${respostaFormatada}</div>
+`;
 
     }catch(error){
 
