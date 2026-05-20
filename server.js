@@ -44,6 +44,9 @@ Título: ${item.title}
 Link HTML: <a href="${item.link}" target="_blank">${item.link}</a>
 Resumo: ${item.snippet}
 
+Abrir página:
+<a href="${item.link}" target="_blank">${item.link}</a>
+
 `;
 
         });
