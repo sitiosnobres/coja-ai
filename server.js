@@ -27,12 +27,17 @@ async function pesquisarSite(pergunta) {
         if (!data.items || data.items.length === 0) {
 
     const respostaAlternativa = await fetch(
-        `https://cojaebarrildealva.pt/?s=${encodeURIComponent(pergunta)}`
+        "https://cojaebarrildealva.pt"
     );
 
     const html = await respostaAlternativa.text();
 
-    return `Foram encontrados resultados diretamente no motor de pesquisa interno do site sobre: ${pergunta}`;
+    if (html.toLowerCase().includes(pergunta.toLowerCase())) {
+
+        return `Foi encontrada referência a "${pergunta}" no site oficial da União de Freguesias de Coja e Barril de Alva.`;
+    }
+
+    return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
 }
 
         let resultados = "";
