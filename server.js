@@ -23,9 +23,16 @@ async function pesquisarSite(pergunta) {
 
         const data = await response.json();
 
-        if (!data.items) {
-            return "Não foram encontrados conteúdos relevantes no site.";
-        }
+        if (!data.items || data.items.length === 0) {
+
+    const respostaAlternativa = await fetch(
+        `https://cojaebarrildealva.pt/?s=${encodeURIComponent(pergunta)}`
+    );
+
+    const html = await respostaAlternativa.text();
+
+    return `Foram encontrados resultados diretamente no motor de pesquisa interno do site sobre: ${pergunta}`;
+}
 
         let resultados = "";
 
