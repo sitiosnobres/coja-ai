@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 async function pesquisarSite(pergunta) {
@@ -39,7 +39,8 @@ async function pesquisarSite(pergunta) {
                 resultados += `
 Resultado ${index + 1}:
 
-Título: ${item.title}
+Título:
+${item.title}
 
 Link:
 ${item.link}
@@ -55,71 +56,65 @@ ${item.snippet}
 
         // FALLBACK HTML DO SITE
         const paginas = [
-    "https://cojaebarrildealva.pt",
-    "https://cojaebarrildealva.pt/category/noticias/",
-    "https://cojaebarrildealva.pt/publicacoes-oficiais/",
-    "https://cojaebarrildealva.pt/espaco-do-cidadao/",
-    "https://cojaebarrildealva.pt/secretaria-online/"
-];
+            "https://cojaebarrildealva.pt",
+            "https://cojaebarrildealva.pt/category/noticias/",
+            "https://cojaebarrildealva.pt/publicacoes-oficiais/",
+            "https://cojaebarrildealva.pt/espaco-do-cidadao/",
+            "https://cojaebarrildealva.pt/secretaria-online/"
+        ];
 
-let encontrou = false;
+        let encontrou = false;
 
-for (const pagina of paginas) {
+        for (const pagina of paginas) {
 
-    try {
+            try {
 
-        const respostaSite = await fetch(pagina);
+                const respostaSite = await fetch(pagina);
 
-        const html = await respostaSite.text();
+                const html = await respostaSite.text();
 
-        const htmlNormalizado = html
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+                const htmlNormalizado = html
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
 
-        const perguntaNormalizada = pergunta
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+                const perguntaNormalizada = pergunta
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
 
-        if (htmlNormalizado.includes(perguntaNormalizada)) {
+                if (htmlNormalizado.includes(perguntaNormalizada)) {
 
-    resultados += `
+                    resultados += `
 Foi encontrada referência a "${pergunta}" na página:
 ${pagina}
 
 `;
 
-    encontrou = true;
+                    encontrou = true;
 
-}
+                }
 
-    } catch (e) {
+            } catch (e) {
 
-        console.log("Erro ao verificar página:", pagina);
+                console.log("Erro ao verificar página:", pagina);
 
-    }
+            }
 
-}
+        }
 
-        const html = await respostaSite.text();
+        // SE ENCONTROU REFERÊNCIAS
+        if (encontrou) {
 
-        const htmlNormalizado = html
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            return resultados;
 
-        const perguntaNormalizada = pergunta
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
-
-       
+        }
 
         // SEM RESULTADOS
         if (!resultados.trim()) {
 
             return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
+
         }
 
         return resultados;
@@ -130,7 +125,9 @@ ${pagina}
         console.error(erro);
 
         return "Erro ao pesquisar o site.";
+
     }
+
 }
 
 app.post("/chat", async (req, res) => {
