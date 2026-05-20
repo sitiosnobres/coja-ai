@@ -13,12 +13,50 @@ app.use(express.static("public"));
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
+async function pesquisarSite(pergunta) {
+
+    try {
+
+        const url = `https://www.googleapis.com/customsearch/v1?q=site:cojaebarrildealva.pt ${encodeURIComponent(pergunta)}&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
+
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        if (!data.items) {
+            return "Não foram encontrados conteúdos relevantes no site.";
+        }
+
+        let resultados = "";
+
+        data.items.slice(0, 3).forEach((item, index) => {
+
+            resultados += `
+Resultado ${index + 1}:
+Título: ${item.title}
+Link: ${item.link}
+Resumo: ${item.snippet}
+
+`;
+
+        });
+
+        return resultados;
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        return "Erro ao pesquisar o site.";
+    }
+}
 
 app.post("/chat", async (req, res) => {
 
   try {
 
     const message = req.body.message;
+    const resultadosSite = await pesquisarSite(message);
 
     console.log("Mensagem recebida:", message);
 
@@ -33,25 +71,16 @@ app.post("/chat", async (req, res) => {
 
 Responde sempre em português de Portugal.
 
-Deves responder prioritariamente usando apenas informações do site:
-https://cojaebarrildealva.pt
+Usa prioritariamente os conteúdos encontrados no site oficial.
 
-Quando o utilizador fizer perguntas sobre:
-- serviços
-- balcão digital
-- editais
-- contactos
-- documentos
-- procedimentos
-- notícias
-- eventos
+Se não encontrares informação no site, diz claramente que não encontraste informação oficial disponível.
 
-deves basear-te apenas nos conteúdos públicos do site da junta.
+Nunca inventes respostas.
 
-Se não tiveres certeza da resposta:
-- diz que não encontraste informação suficiente
-- sugere contactar a junta
-- nunca inventes informações.`
+Resultados encontrados no site:
+
+${resultadosSite}
+`
         },
         {
           role: "user",
