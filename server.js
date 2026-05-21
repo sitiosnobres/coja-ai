@@ -228,6 +228,21 @@ https://www.cojaebarrildealva.pt/editais-avisos/
             });
 
         }
+        // EVENTOS
+if (
+    pergunta.includes("evento") ||
+    pergunta.includes("eventos")
+) {
+
+    return res.json({
+        reply: `
+Podes consultar a agenda oficial de eventos aqui:
+
+https://www.cojaebarrildealva.pt/agenda-de-eventos/
+        `
+    });
+
+}
 
         // PESQUISAR SITE
         const resultadosSite = await pesquisarSite(message);
