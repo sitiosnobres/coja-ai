@@ -282,6 +282,7 @@ async function sendMessage(){
         });
 
         const data = await response.json();
+        await new Promise(resolve => setTimeout(resolve, 1200));
 
         // REMOVE TYPING
         typingDiv.remove();
