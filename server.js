@@ -243,6 +243,21 @@ https://www.cojaebarrildealva.pt/agenda-de-eventos/
     });
 
 }
+        // TURISMO
+if (
+    pergunta.includes("turismo") ||
+    pergunta.includes("portal de turismo")
+) {
+
+    return res.json({
+        reply: `
+Podes consultar o portal oficial de turismo aqui:
+
+https://www.jfcojaturismo.pt/
+        `
+    });
+
+}
 
         // PESQUISAR SITE
         const resultadosSite = await pesquisarSite(message);
