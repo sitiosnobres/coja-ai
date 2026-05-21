@@ -232,6 +232,16 @@ function formatarLinks(texto){
     );
 }
 
+<script>
+
+function formatarLinks(texto){
+
+    return texto.replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank">$1</a>'
+    );
+}
+
 async function sendMessage(){
 
     const input = document.getElementById("userInput");
@@ -242,7 +252,7 @@ async function sendMessage(){
 
     const messages = document.getElementById("messages");
 
-    // MENSAGEM UTILIZADOR
+    // mensagem utilizador
     const userDiv = document.createElement("div");
 
     userDiv.className = "user-message";
@@ -255,7 +265,7 @@ async function sendMessage(){
 
     messages.scrollTop = messages.scrollHeight;
 
-    // TYPING
+    // typing
     const typingDiv = document.createElement("div");
 
     typingDiv.className = "typing";
@@ -282,14 +292,11 @@ async function sendMessage(){
         });
 
         const data = await response.json();
-        await new Promise(resolve => setTimeout(resolve, 1200));
 
-        // REMOVE TYPING
-       if(typingDiv){
-    typingDiv.remove();
-}
+        // remove typing
+        typingDiv.remove();
 
-        // RESPOSTA BOT
+        // resposta bot
         const botDiv = document.createElement("div");
 
         botDiv.className = "bot-message";
@@ -300,12 +307,8 @@ async function sendMessage(){
 
     }catch(error){
 
-        // REMOVE TYPING
-        if(typingDiv){
-    typingDiv.remove();
-}
+        typingDiv.remove();
 
-        // ERRO
         const erroDiv = document.createElement("div");
 
         erroDiv.className = "bot-message";
@@ -317,6 +320,19 @@ async function sendMessage(){
 
     messages.scrollTop = messages.scrollHeight;
 }
+
+document
+.getElementById("userInput")
+.addEventListener("keypress", function(e){
+
+    if(e.key === "Enter"){
+
+        sendMessage();
+    }
+
+});
+
+</script>
 
 // ENTER PARA ENVIAR
 document
