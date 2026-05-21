@@ -67,41 +67,71 @@ ${item.snippet}
 
         for (const pagina of paginas) {
 
-            try {
+    try {
 
-                const respostaSite = await fetch(pagina);
+        const respostaSite = await fetch(pagina);
 
-                const html = await respostaSite.text();
+        const html = await respostaSite.text();
 
-                const htmlNormalizado = html
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "");
+        const htmlNormalizado = html
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
 
-                const perguntaNormalizada = pergunta
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "");
+        const perguntaNormalizada = pergunta
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
 
-                if (htmlNormalizado.includes(perguntaNormalizada)) {
+        // ENCONTROU TEXTO
+        if (htmlNormalizado.includes(perguntaNormalizada)) {
 
-                    resultados += `
-Foi encontrada referência a "${pergunta}" na página:
+            resultados += `
+Foi encontrada informação relacionada com "${pergunta}" na página:
 ${pagina}
 
 `;
 
-                    encontrou = true;
-
-                }
-
-            } catch (e) {
-
-                console.log("Erro ao verificar página:", pagina);
-
-            }
-
+            encontrou = true;
         }
+
+        // EXTRAIR LINKS IMPORTANTES
+        const regexLinks = /href="([^"]+)"/g;
+
+        let match;
+
+        while ((match = regexLinks.exec(html)) !== null) {
+
+            const link = match[1];
+
+            const linkNormalizado = link
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+            if (
+                linkNormalizado.includes(perguntaNormalizada)
+                &&
+                link.startsWith("http")
+            ) {
+
+                resultados += `
+Link relacionado encontrado:
+${link}
+
+`;
+
+                encontrou = true;
+            }
+        }
+
+    } catch (e) {
+
+        console.log("Erro ao verificar página:", pagina);
+
+    }
+
+}
 
         // SE ENCONTROU REFERÊNCIAS
         if (encontrou) {
