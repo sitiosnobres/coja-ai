@@ -243,8 +243,14 @@ console.log("RESULTADOS FINAIS:");
 console.log(resultadosSite);
 
 const response = await client.chat.completions.create({
-        role: "system",
-        content: `
+
+    model: "gpt-3.5-turbo",
+
+    messages: [
+
+        {
+            role: "system",
+            content: `
 És o assistente virtual oficial da União de Freguesias de Coja e Barril de Alva.
 
 Responde sempre em português de Portugal.
@@ -275,14 +281,16 @@ Resultados encontrados no site:
 
 ${resultadosSite}
 `
-    },
+        },
 
-    {
-        role: "user",
-        content: message
-    }
+        {
+            role: "user",
+            content: message
+        }
 
-]
+    ]
+
+});
 
         });
 
