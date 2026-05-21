@@ -193,7 +193,7 @@ body{
 <div class="chat-container">
 
     <div class="header">
-        UFCBA IA
+        UFCBA Assistente Virtual
     </div>
 
     <div class="messages" id="messages">
@@ -219,18 +219,6 @@ body{
     </div>
 
 </div>
-
-<script>
-
-function formatarLinks(texto){
-
-    return texto.replace(
-
-        /(https?:\/\/[^\s]+)/g,
-
-        '<a href="$1" target="_blank">$1</a>'
-    );
-}
 
 <script>
 
@@ -321,20 +309,7 @@ async function sendMessage(){
     messages.scrollTop = messages.scrollHeight;
 }
 
-document
-.getElementById("userInput")
-.addEventListener("keypress", function(e){
-
-    if(e.key === "Enter"){
-
-        sendMessage();
-    }
-
-});
-
-</script>
-
-// ENTER PARA ENVIAR
+// enter para enviar
 document
 .getElementById("userInput")
 .addEventListener("keypress", function(e){
