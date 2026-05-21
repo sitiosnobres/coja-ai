@@ -1,4 +1,9 @@
 require("dotenv").config();
+const fs = require("fs");
+
+const config = JSON.parse(
+  fs.readFileSync("./config.json", "utf8")
+);
 
 const express = require("express");
 const cors = require("cors");
@@ -198,37 +203,38 @@ app.post("/chat", async (req, res) => {
         const pergunta = message.toLowerCase();
 
         // ATAS
-        if (
-            pergunta.includes("ata") ||
-            pergunta.includes("atas")
-        ) {
+if (
+    pergunta.includes("ata") ||
+    pergunta.includes("atas")
+) {
 
-            return res.json({
-                reply: `
+    return res.json({
+        reply: `
 Podes consultar as atas da União de Freguesias aqui:
 
-https://www.cojaebarrildealva.pt/publicacoes-oficiais/
-                `
-            });
+${config.links.atas}
+`
+    });
 
-        }
+}
 
-        // EDITAIS
-        if (
-            pergunta.includes("edital") ||
-            pergunta.includes("editais")
-        ) {
+// EDITAIS
+if (
+    pergunta.includes("edital") ||
+    pergunta.includes("editais")
+) {
 
-            return res.json({
-                reply: `
+    return res.json({
+        reply: `
 Podes consultar os editais e avisos aqui:
 
-https://www.cojaebarrildealva.pt/editais-avisos/
-                `
-            });
+${config.links.editais}
+`
+    });
 
-        }
-        // EVENTOS
+}
+
+// EVENTOS
 if (
     pergunta.includes("evento") ||
     pergunta.includes("eventos")
@@ -238,12 +244,13 @@ if (
         reply: `
 Podes consultar a agenda oficial de eventos aqui:
 
-https://www.cojaebarrildealva.pt/agenda-de-eventos/
-        `
+${config.links.eventos}
+`
     });
 
 }
-        // TURISMO
+
+// TURISMO
 if (
     pergunta.includes("turismo") ||
     pergunta.includes("portal de turismo")
@@ -253,12 +260,13 @@ if (
         reply: `
 Podes consultar o portal oficial de turismo aqui:
 
-https://www.jfcojaturismo.pt/
-        `
+${config.links.turismo}
+`
     });
 
 }
-        // EXECUTIVO / JUNTA / COMPOSIÇÃO
+
+// EXECUTIVO / JUNTA / COMPOSIÇÃO
 if (
     pergunta.includes("executivo") ||
     pergunta.includes("junta de freguesia") ||
@@ -270,8 +278,8 @@ if (
         reply: `
 Podes consultar a composição do executivo da Junta de Freguesia aqui:
 
-https://www.cojaebarrildealva.pt/composicao/
-        `
+${config.links.executivo}
+`
     });
 
 }
