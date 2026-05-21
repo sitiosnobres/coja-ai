@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>UFCBA IA</title>
 
 <style>
@@ -20,6 +21,7 @@ body{
 }
 
 .chat-container{
+
     width:100%;
     height:100vh;
 
@@ -30,6 +32,7 @@ body{
 }
 
 .header{
+
     background:#005b8f;
     color:white;
 
@@ -40,6 +43,7 @@ body{
 }
 
 .messages{
+
     flex:1;
 
     overflow-y:auto;
@@ -50,6 +54,7 @@ body{
 }
 
 .bot-message{
+
     background:#e7e7e7;
 
     padding:12px;
@@ -59,9 +64,12 @@ body{
     margin-bottom:10px;
 
     max-width:85%;
+
+    line-height:1.5;
 }
 
 .user-message{
+
     background:#d8f5d8;
 
     padding:12px;
@@ -73,6 +81,24 @@ body{
     margin-left:auto;
 
     max-width:85%;
+
+    line-height:1.5;
+}
+
+.bot-message a{
+
+    color:#005b8f;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    word-break:break-word;
+}
+
+.bot-message a:hover{
+
+    text-decoration:underline;
 }
 
 .input-area{
@@ -114,6 +140,24 @@ body{
     border-radius:8px;
 
     cursor:pointer;
+
+    transition:0.2s;
+}
+
+.input-area button:hover{
+
+    opacity:0.9;
+}
+
+.typing{
+
+    font-size:14px;
+
+    color:#666;
+
+    margin-bottom:10px;
+
+    font-style:italic;
 }
 
 </style>
@@ -153,23 +197,51 @@ body{
 
 <script>
 
+function formatarLinks(texto){
+
+    return texto.replace(
+
+        /(https?:\/\/[^\s]+)/g,
+
+        '<a href="$1" target="_blank">$1</a>'
+    );
+}
+
 async function sendMessage(){
 
-    const input=document.getElementById("userInput");
+    const input = document.getElementById("userInput");
 
-    const text=input.value.trim();
+    const text = input.value.trim();
 
     if(!text) return;
 
-    const messages=document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
     messages.innerHTML += `
-        <div class="user-message">${text}</div>
+        <div class="user-message">
+            ${text}
+        </div>
     `;
 
-    input.value="";
+    input.value = "";
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
+
+    const typingId = "typing-" + Date.now();
+
+    messages.innerHTML += `
+        <div class="typing" id="${typingId}">
+            UFCBA AI está a escrever...
+        </div>
+    `;
+
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 
     try{
 
@@ -188,16 +260,19 @@ async function sendMessage(){
 
         const data = await response.json();
 
-        const respostaFormatada = data.reply.replace(
-    /(https?:\/\/[^\s]+)/g,
-    '<a href="$1" target="_blank">$1</a>'
-);
+        document.getElementById(typingId)?.remove();
 
-messages.innerHTML += `
-    <div class="bot-message">${respostaFormatada}</div>
-`;
+        const respostaFormatada = formatarLinks(data.reply);
+
+        messages.innerHTML += `
+            <div class="bot-message">
+                ${respostaFormatada}
+            </div>
+        `;
 
     }catch(error){
+
+        document.getElementById(typingId)?.remove();
 
         messages.innerHTML += `
             <div class="bot-message">
@@ -206,8 +281,22 @@ messages.innerHTML += `
         `;
     }
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 }
+
+document
+.getElementById("userInput")
+.addEventListener("keypress", function(e){
+
+    if(e.key === "Enter"){
+
+        sendMessage();
+    }
+
+});
 
 </script>
 
