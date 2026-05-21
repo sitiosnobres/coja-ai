@@ -233,11 +233,15 @@ async function sendMessage(){
     const typingId = "typing-" + Date.now();
 
     messages.innerHTML += `
-        <div class="typing" id="${typingId}">
-            UFCBA AI está a escrever...
-            
-        </div>
-    `;
+    <div class="bot-message typing" id="${typingId}">
+        UFCBA AI está a escrever...
+    </div>
+`;
+
+messages.scrollTop = messages.scrollHeight;
+
+// força o browser a desenhar antes do fetch
+await new Promise(resolve => setTimeout(resolve, 300));
 
     messages.scrollTo({
         top: messages.scrollHeight,
