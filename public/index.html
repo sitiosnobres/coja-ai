@@ -257,12 +257,15 @@ async function sendMessage(){
     // TYPING
     const typingId = "typing-" + Date.now();
 
-    messages.innerHTML += `
-        <div class="typing" id="${typingId}">
-            UFCBA AI está a escrever...
-        </div>
-    `;
+    const typingDiv = document.createElement("div");
 
+typingDiv.className = "typing";
+
+typingDiv.id = typingId;
+
+typingDiv.innerText = "UFCBA AI está a escrever...";
+
+messages.appendChild(typingDiv);
     messages.scrollTo({
         top: messages.scrollHeight,
         behavior: "smooth"
