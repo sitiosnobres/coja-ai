@@ -259,7 +259,6 @@ async function sendMessage(){
         });
 
         const data = await response.json();
-
         document.getElementById(typingId)?.remove();
 
         const respostaFormatada = formatarLinks(data.reply);
