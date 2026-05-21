@@ -109,11 +109,39 @@ ${pagina}
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "");
 
-            if (
-                linkNormalizado.includes(perguntaNormalizada)
-                &&
-                link.startsWith("http")
-            ) {
+            if (link.startsWith("http")) {
+
+    const slugLink = linkNormalizado
+        .replace("https://www.cojaebarrildealva.pt/", "")
+        .replace(/\//g, " ")
+        .trim();
+
+    // MATCH DIRETO NO LINK
+    if (slugLink.includes(perguntaNormalizada)) {
+
+        resultados =
+`
+LINK PRINCIPAL ENCONTRADO:
+${link}
+
+`
++ resultados;
+
+        encontrou = true;
+    }
+
+    // MATCH PARCIAL
+    else if (linkNormalizado.includes(perguntaNormalizada)) {
+
+        resultados += `
+Link relacionado encontrado:
+${link}
+
+`;
+
+        encontrou = true;
+    }
+} {
 
                 resultados += `
 Link relacionado encontrado:
