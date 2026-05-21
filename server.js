@@ -207,7 +207,7 @@ app.post("/chat", async (req, res) => {
                 reply: `
 Podes consultar as atas da União de Freguesias aqui:
 
-https://www.cojaebarrildealva.pt/atas/
+https://www.cojaebarrildealva.pt/publicacoes-oficiais/
                 `
             });
 
