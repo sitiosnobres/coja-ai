@@ -235,6 +235,7 @@ async function sendMessage(){
     messages.innerHTML += `
         <div class="typing" id="${typingId}">
             UFCBA AI está a escrever...
+            
         </div>
     `;
 
@@ -242,7 +243,7 @@ async function sendMessage(){
         top: messages.scrollHeight,
         behavior: "smooth"
     });
-
+await new Promise(resolve => setTimeout(resolve, 100));
     try{
 
         const response = await fetch("/chat",{
