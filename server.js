@@ -258,6 +258,23 @@ https://www.jfcojaturismo.pt/
     });
 
 }
+        // EXECUTIVO / JUNTA / COMPOSIÇÃO
+if (
+    pergunta.includes("executivo") ||
+    pergunta.includes("junta de freguesia") ||
+    pergunta.includes("composicao") ||
+    pergunta.includes("composição")
+) {
+
+    return res.json({
+        reply: `
+Podes consultar a composição do executivo da Junta de Freguesia aqui:
+
+https://www.cojaebarrildealva.pt/composicao/
+        `
+    });
+
+}
 
         // PESQUISAR SITE
         const resultadosSite = await pesquisarSite(message);
