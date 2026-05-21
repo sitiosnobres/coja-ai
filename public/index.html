@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -184,6 +185,7 @@ body{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -241,36 +243,31 @@ async function sendMessage(){
     const messages = document.getElementById("messages");
 
     // MENSAGEM UTILIZADOR
-    messages.innerHTML += `
-        <div class="user-message">
-            ${text}
-        </div>
-    `;
+    const userDiv = document.createElement("div");
+
+    userDiv.className = "user-message";
+
+    userDiv.innerText = text;
+
+    messages.appendChild(userDiv);
 
     input.value = "";
 
-    messages.scrollTo({
-        top: messages.scrollHeight,
-        behavior: "smooth"
-    });
+    messages.scrollTop = messages.scrollHeight;
 
-    // CRIA TYPING
+    // TYPING
     const typingDiv = document.createElement("div");
 
     typingDiv.className = "typing";
 
-    typingDiv.innerHTML = "UFCBA AI está a escrever...";
+    typingDiv.innerText = "UFCBA AI está a escrever...";
 
     messages.appendChild(typingDiv);
 
     messages.scrollTop = messages.scrollHeight;
 
-    // força render visual
-    await new Promise(resolve => setTimeout(resolve, 100));
-
     try{
 
-        // FETCH SERVIDOR
         const response = await fetch("/chat",{
 
             method:"POST",
@@ -289,33 +286,31 @@ async function sendMessage(){
         // REMOVE TYPING
         typingDiv.remove();
 
-        // FORMATA LINKS
-        const respostaFormatada = formatarLinks(data.reply);
-
         // RESPOSTA BOT
-        messages.innerHTML += `
-            <div class="bot-message">
-                ${respostaFormatada}
-            </div>
-        `;
+        const botDiv = document.createElement("div");
+
+        botDiv.className = "bot-message";
+
+        botDiv.innerHTML = formatarLinks(data.reply);
+
+        messages.appendChild(botDiv);
 
     }catch(error){
 
         // REMOVE TYPING
         typingDiv.remove();
 
-        messages.innerHTML += `
-            <div class="bot-message">
-                Erro ao contactar o servidor.
-            </div>
-        `;
+        // ERRO
+        const erroDiv = document.createElement("div");
+
+        erroDiv.className = "bot-message";
+
+        erroDiv.innerText = "Erro ao contactar o servidor.";
+
+        messages.appendChild(erroDiv);
     }
 
-    // SCROLL FINAL
-    messages.scrollTo({
-        top: messages.scrollHeight,
-        behavior: "smooth"
-    });
+    messages.scrollTop = messages.scrollHeight;
 }
 
 // ENTER PARA ENVIAR
