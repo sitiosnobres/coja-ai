@@ -19,22 +19,31 @@ async function pesquisarSite(pergunta) {
 
     try {
 
-        // PESQUISA GOOGLE CUSTOM SEARCH
-        const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(pergunta)}&num=5&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
-
-        const response = await fetch(url);
-
-        const data = await response.json();
-
-        console.log("RESULTADOS GOOGLE:");
-        console.log(JSON.stringify(data, null, 2));
+        const perguntaNormalizada = pergunta
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
 
         let resultados = "";
 
-        // RESULTADOS GOOGLE
-        if (data.items && data.items.length > 0) {
+        // =========================
+        // GOOGLE CUSTOM SEARCH
+        // =========================
 
-            data.items.slice(0, 3).forEach((item, index) => {
+        const urlGoogle =
+            `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(pergunta)}&num=5&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
+
+        const responseGoogle = await fetch(urlGoogle);
+
+        const dataGoogle = await responseGoogle.json();
+
+        console.log("RESULTADOS GOOGLE:");
+        console.log(JSON.stringify(dataGoogle, null, 2));
+
+        // RESULTADOS GOOGLE
+        if (dataGoogle.items && dataGoogle.items.length > 0) {
+
+            dataGoogle.items.slice(0, 3).forEach((item, index) => {
 
                 resultados += `
 Resultado ${index + 1}:
@@ -54,122 +63,121 @@ ${item.snippet}
 
         }
 
-        // FALLBACK HTML DO SITE
+        // =========================
+        // PÁGINAS IMPORTANTES
+        // =========================
+
         const paginas = [
-            "https://cojaebarrildealva.pt",
-            "https://cojaebarrildealva.pt/category/noticias/",
-            "https://cojaebarrildealva.pt/publicacoes-oficiais/",
-            "https://cojaebarrildealva.pt/espaco-do-cidadao/",
-            "https://cojaebarrildealva.pt/secretaria-online/"
+            "https://www.cojaebarrildealva.pt/",
+            "https://www.cojaebarrildealva.pt/portal-de-turismo/",
+            "https://www.cojaebarrildealva.pt/category/noticias/",
+            "https://www.cojaebarrildealva.pt/publicacoes-oficiais/",
+            "https://www.cojaebarrildealva.pt/espaco-do-cidadao/",
+            "https://www.cojaebarrildealva.pt/secretaria-online/"
         ];
 
         let encontrou = false;
 
         for (const pagina of paginas) {
 
-    try {
+            try {
 
-        const respostaSite = await fetch(pagina);
+                const respostaSite = await fetch(pagina);
 
-        const html = await respostaSite.text();
+                const html = await respostaSite.text();
 
-        const htmlNormalizado = html
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+                const htmlNormalizado = html
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
 
-        const perguntaNormalizada = pergunta
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+                // =========================
+                // PESQUISA NO HTML
+                // =========================
 
-        // ENCONTROU TEXTO
-        if (htmlNormalizado.includes(perguntaNormalizada)) {
+                if (htmlNormalizado.includes(perguntaNormalizada)) {
 
-            resultados += `
+                    resultados += `
 Foi encontrada informação relacionada com "${pergunta}" na página:
 ${pagina}
 
 `;
 
-            encontrou = true;
-        }
+                    encontrou = true;
+                }
 
-        // EXTRAIR LINKS IMPORTANTES
-        const regexLinks = /href="([^"]+)"/g;
+                // =========================
+                // EXTRAIR LINKS
+                // =========================
 
-        let match;
+                const regexLinks = /href="([^"]+)"/g;
 
-        while ((match = regexLinks.exec(html)) !== null) {
+                let match;
 
-            const link = match[1];
+                while ((match = regexLinks.exec(html)) !== null) {
 
-            const linkNormalizado = link
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
+                    const link = match[1];
 
-            if (link.startsWith("http")) {
+                    if (!link.startsWith("http")) {
+                        continue;
+                    }
 
-    const slugLink = linkNormalizado
-        .replace("https://www.cojaebarrildealva.pt/", "")
-        .replace(/\//g, " ")
-        .trim();
+                    const linkNormalizado = link
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "");
 
-    // MATCH DIRETO NO LINK
-    if (slugLink.includes(perguntaNormalizada)) {
+                    const slugLink = linkNormalizado
+                        .replace("https://www.cojaebarrildealva.pt/", "")
+                        .replace(/\//g, " ")
+                        .replace(/-/g, " ")
+                        .trim();
 
-        resultados =
-`
-LINK PRINCIPAL ENCONTRADO:
+                    // =========================
+                    // LINK PRINCIPAL
+                    // =========================
+
+                    if (slugLink.includes(perguntaNormalizada)) {
+
+                        resultados =
+`LINK PRINCIPAL ENCONTRADO:
 ${link}
 
-`
-+ resultados;
+` + resultados;
 
-        encontrou = true;
-    }
+                        encontrou = true;
+                    }
 
-    // MATCH PARCIAL
-    else if (linkNormalizado.includes(perguntaNormalizada)) {
+                    // =========================
+                    // LINK RELACIONADO
+                    // =========================
 
-        resultados += `
-Link relacionado encontrado:
+                    else if (linkNormalizado.includes(perguntaNormalizada)) {
+
+                        resultados +=
+`Link relacionado encontrado:
 ${link}
 
 `;
 
-        encontrou = true;
-    }
-} {
+                        encontrou = true;
+                    }
 
-                resultados += `
-Link relacionado encontrado:
-${link}
+                }
 
-`;
+            } catch (e) {
 
-                encontrou = true;
+                console.log("Erro ao verificar página:", pagina);
+
             }
-        }
-
-    } catch (e) {
-
-        console.log("Erro ao verificar página:", pagina);
-
-    }
-
-}
-
-        // SE ENCONTROU REFERÊNCIAS
-        if (encontrou) {
-
-            return resultados;
 
         }
 
+        // =========================
         // SEM RESULTADOS
-        if (!resultados.trim()) {
+        // =========================
+
+        if (!encontrou && !resultados.trim()) {
 
             return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
 
@@ -187,6 +195,10 @@ ${link}
     }
 
 }
+
+// =========================
+// CHAT
+// =========================
 
 app.post("/chat", async (req, res) => {
 
@@ -216,13 +228,13 @@ Responde sempre em português de Portugal.
 
 Usa SEMPRE os resultados encontrados no site oficial.
 
-Se existirem resultados encontrados, responde obrigatoriamente com base nesses resultados.
+Se existirem links principais encontrados, dá prioridade máxima a esses links.
 
 Nunca digas que não encontraste informação se existirem resultados.
 
 Resume os conteúdos encontrados de forma clara, útil e amigável.
 
-Se existirem links relevantes, menciona-os.
+Se existirem links relevantes, menciona-os claramente.
 
 Se realmente não existirem resultados, então informa claramente que não foi encontrada informação oficial disponível.
 
@@ -259,6 +271,10 @@ ${resultadosSite}
     }
 
 });
+
+// =========================
+// SERVIDOR
+// =========================
 
 app.listen(3000, () => {
 
