@@ -257,22 +257,29 @@ async function sendMessage(){
     // TYPING
     const typingId = "typing-" + Date.now();
 
-    const typingDiv = document.createElement("div");
+    const typingId = "typing-" + Date.now();
 
-typingDiv.className = "typing";
+const typingDiv = document.createElement("div");
+
+typingDiv.classList.add("bot-message");
+
+typingDiv.classList.add("typing");
 
 typingDiv.id = typingId;
 
-typingDiv.innerText = "UFCBA AI está a escrever...";
+typingDiv.innerHTML = `
+    UFCBA AI está a escrever...
+`;
 
 messages.appendChild(typingDiv);
-    messages.scrollTo({
-        top: messages.scrollHeight,
-        behavior: "smooth"
-    });
 
-    // FORÇA O BROWSER A DESENHAR
-    await new Promise(resolve => setTimeout(resolve, 300));
+// força repaint imediato
+messages.scrollTop = messages.scrollHeight;
+
+// força render visual
+await new Promise(resolve => requestAnimationFrame(resolve));
+
+await new Promise(resolve => setTimeout(resolve, 500));
 
     try{
 
