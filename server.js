@@ -15,6 +15,10 @@ const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
+// =========================
+// PESQUISAR SITE
+// =========================
+
 async function pesquisarSite(pergunta) {
 
     try {
@@ -26,10 +30,7 @@ async function pesquisarSite(pergunta) {
 
         let resultados = "";
 
-        // =========================
         // GOOGLE CUSTOM SEARCH
-        // =========================
-
         const urlGoogle =
             `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(pergunta)}&num=5&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`;
 
@@ -63,10 +64,7 @@ ${item.snippet}
 
         }
 
-        // =========================
         // PÁGINAS IMPORTANTES
-        // =========================
-
         const paginas = [
             "https://www.cojaebarrildealva.pt/",
             "https://www.cojaebarrildealva.pt/portal-de-turismo/",
@@ -91,10 +89,7 @@ ${item.snippet}
                     .normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "");
 
-                // =========================
-                // PESQUISA NO HTML
-                // =========================
-
+                // PESQUISA HTML
                 if (htmlNormalizado.includes(perguntaNormalizada)) {
 
                     resultados += `
@@ -106,10 +101,7 @@ ${pagina}
                     encontrou = true;
                 }
 
-                // =========================
                 // EXTRAIR LINKS
-                // =========================
-
                 const regexLinks = /href="([^"]+)"/g;
 
                 let match;
@@ -133,10 +125,7 @@ ${pagina}
                         .replace(/-/g, " ")
                         .trim();
 
-                    // =========================
                     // LINK PRINCIPAL
-                    // =========================
-
                     if (slugLink.includes(perguntaNormalizada)) {
 
                         resultados =
@@ -148,10 +137,7 @@ ${link}
                         encontrou = true;
                     }
 
-                    // =========================
                     // LINK RELACIONADO
-                    // =========================
-
                     else if (linkNormalizado.includes(perguntaNormalizada)) {
 
                         resultados +=
@@ -173,10 +159,7 @@ ${link}
 
         }
 
-        // =========================
         // SEM RESULTADOS
-        // =========================
-
         if (!encontrou && !resultados.trim()) {
 
             return `Não foram encontrados resultados oficiais sobre "${pergunta}".`;
@@ -206,51 +189,62 @@ app.post("/chat", async (req, res) => {
 
         const message = req.body.message;
 
-console.log("Mensagem recebida:", message);
+        console.log("Mensagem recebida:", message);
 
-// PALAVRAS-CHAVE INTELIGENTES
-const pergunta = message.toLowerCase();
+        // =========================
+        // PALAVRAS-CHAVE INTELIGENTES
+        // =========================
 
-if (
-    pergunta.includes("ata") ||
-    pergunta.includes("atas")
-){
-    return res.json({
-        reply: `
+        const pergunta = message.toLowerCase();
+
+        // ATAS
+        if (
+            pergunta.includes("ata") ||
+            pergunta.includes("atas")
+        ) {
+
+            return res.json({
+                reply: `
 Podes consultar as atas da União de Freguesias aqui:
 
 https://www.cojaebarrildealva.pt/atas/
-        `
-    });
-}
+                `
+            });
 
-if (
-    pergunta.includes("edital") ||
-    pergunta.includes("editais")
-){
-    return res.json({
-        reply: `
+        }
+
+        // EDITAIS
+        if (
+            pergunta.includes("edital") ||
+            pergunta.includes("editais")
+        ) {
+
+            return res.json({
+                reply: `
 Podes consultar os editais e avisos aqui:
 
 https://www.cojaebarrildealva.pt/editais-avisos/
-        `
-    });
-}
+                `
+            });
 
-const resultadosSite = await pesquisarSite(message);
+        }
 
-console.log("RESULTADOS FINAIS:");
-console.log(resultadosSite);
+        // PESQUISAR SITE
+        const resultadosSite = await pesquisarSite(message);
 
-const response = await client.chat.completions.create({
+        console.log("RESULTADOS FINAIS:");
+        console.log(resultadosSite);
 
-    model: "gpt-3.5-turbo",
+        // OPENAI
+        const response = await client.chat.completions.create({
 
-    messages: [
+            model: "gpt-3.5-turbo",
 
-        {
-            role: "system",
-            content: `
+            messages: [
+
+                {
+                    role: "system",
+                    content: `
 És o assistente virtual oficial da União de Freguesias de Coja e Barril de Alva.
 
 Responde sempre em português de Portugal.
@@ -281,16 +275,14 @@ Resultados encontrados no site:
 
 ${resultadosSite}
 `
-        },
+                },
 
-        {
-            role: "user",
-            content: message
-        }
+                {
+                    role: "user",
+                    content: message
+                }
 
-    ]
-
-});
+            ]
 
         });
 
