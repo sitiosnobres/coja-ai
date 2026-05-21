@@ -285,7 +285,9 @@ async function sendMessage(){
         await new Promise(resolve => setTimeout(resolve, 1200));
 
         // REMOVE TYPING
-        typingDiv.remove();
+       if(typingDiv){
+    typingDiv.remove();
+}
 
         // RESPOSTA BOT
         const botDiv = document.createElement("div");
@@ -299,7 +301,9 @@ async function sendMessage(){
     }catch(error){
 
         // REMOVE TYPING
-        typingDiv.remove();
+        if(typingDiv){
+    typingDiv.remove();
+}
 
         // ERRO
         const erroDiv = document.createElement("div");
