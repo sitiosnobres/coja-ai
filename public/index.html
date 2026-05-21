@@ -151,13 +151,36 @@ body{
 
 .typing{
 
-    font-size:14px;
+    background:#e7e7e7;
 
-    color:#666;
+    padding:12px;
+
+    border-radius:10px;
 
     margin-bottom:10px;
 
+    max-width:85%;
+
+    color:#666;
+
     font-style:italic;
+
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:0.4;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.4;
+    }
 }
 
 </style>
@@ -217,6 +240,7 @@ async function sendMessage(){
 
     const messages = document.getElementById("messages");
 
+    // MENSAGEM UTILIZADOR
     messages.innerHTML += `
         <div class="user-message">
             ${text}
@@ -230,26 +254,26 @@ async function sendMessage(){
         behavior: "smooth"
     });
 
+    // TYPING
     const typingId = "typing-" + Date.now();
 
     messages.innerHTML += `
-    <div class="bot-message typing" id="${typingId}">
-        UFCBA AI está a escrever...
-    </div>
-`;
-
-messages.scrollTop = messages.scrollHeight;
-
-// força o browser a desenhar antes do fetch
-await new Promise(resolve => setTimeout(resolve, 300));
+        <div class="typing" id="${typingId}">
+            UFCBA AI está a escrever...
+        </div>
+    `;
 
     messages.scrollTo({
         top: messages.scrollHeight,
         behavior: "smooth"
     });
-await new Promise(resolve => setTimeout(resolve, 100));
+
+    // FORÇA O BROWSER A DESENHAR
+    await new Promise(resolve => setTimeout(resolve, 300));
+
     try{
 
+        // FETCH SERVIDOR
         const response = await fetch("/chat",{
 
             method:"POST",
@@ -264,10 +288,14 @@ await new Promise(resolve => setTimeout(resolve, 100));
         });
 
         const data = await response.json();
+
+        // REMOVE TYPING
         document.getElementById(typingId)?.remove();
 
+        // FORMATA LINKS
         const respostaFormatada = formatarLinks(data.reply);
 
+        // RESPOSTA BOT
         messages.innerHTML += `
             <div class="bot-message">
                 ${respostaFormatada}
@@ -276,6 +304,7 @@ await new Promise(resolve => setTimeout(resolve, 100));
 
     }catch(error){
 
+        // REMOVE TYPING
         document.getElementById(typingId)?.remove();
 
         messages.innerHTML += `
@@ -285,12 +314,14 @@ await new Promise(resolve => setTimeout(resolve, 100));
         `;
     }
 
+    // SCROLL FINAL
     messages.scrollTo({
         top: messages.scrollHeight,
         behavior: "smooth"
     });
 }
 
+// ENTER PARA ENVIAR
 document
 .getElementById("userInput")
 .addEventListener("keypress", function(e){
