@@ -167,26 +167,7 @@ body{
 
     animation:pulse 1s infinite;
 }
-.typing-fixed{
 
-    display:none;
-
-    background:#e7e7e7;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    margin-bottom:10px;
-
-    max-width:85%;
-
-    color:#666;
-
-    font-style:italic;
-
-    animation:pulse 1s infinite;
-}
 @keyframes pulse{
 
     0%{
@@ -214,9 +195,7 @@ body{
     </div>
 
     <div class="messages" id="messages">
-<div class="typing-fixed" id="typingFixed">
-    UFCBA AI está a escrever...
-</div>
+
         <div class="bot-message">
             Olá 👋 Em que posso ajudar?
         </div>
@@ -275,13 +254,19 @@ async function sendMessage(){
         behavior: "smooth"
     });
 
-    // TYPING
-    const typing = document.getElementById("typingFixed");
-    typing.style.display = "block";
+    // CRIA TYPING
+    const typingDiv = document.createElement("div");
 
-typing.style.display = "block";
+    typingDiv.className = "typing";
 
-messages.scrollTop = messages.scrollHeight;
+    typingDiv.innerHTML = "UFCBA AI está a escrever...";
+
+    messages.appendChild(typingDiv);
+
+    messages.scrollTop = messages.scrollHeight;
+
+    // força render visual
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     try{
 
@@ -300,10 +285,9 @@ messages.scrollTop = messages.scrollHeight;
         });
 
         const data = await response.json();
-        typing.style.display = "none";
 
         // REMOVE TYPING
-        document.getElementById(typingId)?.remove();
+        typingDiv.remove();
 
         // FORMATA LINKS
         const respostaFormatada = formatarLinks(data.reply);
@@ -318,7 +302,7 @@ messages.scrollTop = messages.scrollHeight;
     }catch(error){
 
         // REMOVE TYPING
-        typing.style.display = "none";
+        typingDiv.remove();
 
         messages.innerHTML += `
             <div class="bot-message">
