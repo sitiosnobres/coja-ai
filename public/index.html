@@ -195,7 +195,9 @@ body{
     </div>
 
     <div class="messages" id="messages">
-
+<div class="typing-fixed" id="typingFixed">
+    UFCBA AI está a escrever...
+</div>
         <div class="bot-message">
             Olá 👋 Em que posso ajudar?
         </div>
@@ -255,31 +257,11 @@ async function sendMessage(){
     });
 
     // TYPING
-    const typingId = "typing-" + Date.now();
+    const typing = document.getElementById("typingFixed");
 
-    const typingId = "typing-" + Date.now();
+typing.style.display = "block";
 
-const typingDiv = document.createElement("div");
-
-typingDiv.classList.add("bot-message");
-
-typingDiv.classList.add("typing");
-
-typingDiv.id = typingId;
-
-typingDiv.innerHTML = `
-    UFCBA AI está a escrever...
-`;
-
-messages.appendChild(typingDiv);
-
-// força repaint imediato
 messages.scrollTop = messages.scrollHeight;
-
-// força render visual
-await new Promise(resolve => requestAnimationFrame(resolve));
-
-await new Promise(resolve => setTimeout(resolve, 500));
 
     try{
 
@@ -298,6 +280,7 @@ await new Promise(resolve => setTimeout(resolve, 500));
         });
 
         const data = await response.json();
+        typing.style.display = "none";
 
         // REMOVE TYPING
         document.getElementById(typingId)?.remove();
@@ -315,7 +298,7 @@ await new Promise(resolve => setTimeout(resolve, 500));
     }catch(error){
 
         // REMOVE TYPING
-        document.getElementById(typingId)?.remove();
+        typing.style.display = "none";
 
         messages.innerHTML += `
             <div class="bot-message">
