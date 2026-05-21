@@ -206,20 +206,43 @@ app.post("/chat", async (req, res) => {
 
         const message = req.body.message;
 
-        console.log("Mensagem recebida:", message);
+console.log("Mensagem recebida:", message);
 
-        const resultadosSite = await pesquisarSite(message);
+// PALAVRAS-CHAVE INTELIGENTES
+const pergunta = message.toLowerCase();
 
-        console.log("RESULTADOS FINAIS:");
-        console.log(resultadosSite);
+if (
+    pergunta.includes("ata") ||
+    pergunta.includes("atas")
+){
+    return res.json({
+        reply: `
+Podes consultar as atas da União de Freguesias aqui:
 
-        const response = await client.chat.completions.create({
+https://www.cojaebarrildealva.pt/atas/
+        `
+    });
+}
 
-            model: "gpt-3.5-turbo",
+if (
+    pergunta.includes("edital") ||
+    pergunta.includes("editais")
+){
+    return res.json({
+        reply: `
+Podes consultar os editais e avisos aqui:
 
-            messages: [
+https://www.cojaebarrildealva.pt/editais-avisos/
+        `
+    });
+}
 
-    {
+const resultadosSite = await pesquisarSite(message);
+
+console.log("RESULTADOS FINAIS:");
+console.log(resultadosSite);
+
+const response = await client.chat.completions.create({
         role: "system",
         content: `
 És o assistente virtual oficial da União de Freguesias de Coja e Barril de Alva.
