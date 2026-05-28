@@ -1,12 +1,13 @@
 ```html
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>UFCBA Sempre Consigo</title>
+<title>Freguesia 24H</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +32,7 @@ body{
 
     font-family:'Inter',sans-serif;
 
-    background:
-    linear-gradient(
-        180deg,
-        #eef5ef 0%,
-        #f8fbf8 100%
-    );
+    background:#f5f7f5;
 }
 
 
@@ -48,16 +44,12 @@ body{
 .chat-container{
 
     width:100%;
-    height:100vh;
+    height:100%;
 
     display:flex;
     flex-direction:column;
 
-    background:
-    rgba(255,255,255,.72);
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    background:#f7faf7;
 }
 
 
@@ -70,14 +62,6 @@ body{
 
     height:78px;
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 24px;
-
-    color:#fff;
-
     background:
     linear-gradient(
         135deg,
@@ -85,12 +69,16 @@ body{
         #59c36a
     );
 
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    color:#fff;
+
     box-shadow:
-    0 8px 30px rgba(31,143,69,.25);
-
-    position:relative;
-
-    z-index:10;
+    0 8px 30px rgba(31,143,69,.18);
 }
 
 .header-left{
@@ -98,13 +86,13 @@ body{
     display:flex;
     align-items:center;
 
-    gap:14px;
+    gap:12px;
 }
 
 .logo{
 
-    width:46px;
-    height:46px;
+    width:48px;
+    height:48px;
 
     border-radius:14px;
 
@@ -116,36 +104,22 @@ body{
     justify-content:center;
 
     font-size:24px;
-
-    backdrop-filter:blur(10px);
 }
 
-.header h1{
+.title h1{
 
-    font-size:23px;
+    font-size:18px;
     font-weight:800;
 
-    letter-spacing:-0.5px;
+    line-height:1.1;
 }
 
-.header span{
+.title span{
 
-    display:block;
+    font-size:12px;
 
-    font-size:13px;
-
-    opacity:.9;
-
-    font-weight:500;
-
-    margin-top:2px;
+    opacity:.92;
 }
-
-
-
-/* =========================================
-   STATUS
-========================================= */
 
 .status{
 
@@ -166,10 +140,10 @@ body{
 
     border-radius:50%;
 
-    background:#9dffaf;
+    background:#9fffab;
 
     box-shadow:
-    0 0 10px #9dffaf;
+    0 0 10px #9fffab;
 }
 
 
@@ -184,49 +158,34 @@ body{
 
     overflow-y:auto;
 
-    padding:26px 22px 40px;
+    padding:18px;
 
-    scroll-behavior:smooth;
-}
-
-
-
-/* scrollbar */
-
-.messages::-webkit-scrollbar{
-    width:8px;
-}
-
-.messages::-webkit-scrollbar-thumb{
-
-    background:#d7e8d8;
-
-    border-radius:20px;
+    background:#f5f7f5;
 }
 
 
 
 /* =========================================
-   BALÕES
+   BUBBLES
 ========================================= */
 
 .bot-message,
 .user-message,
 .typing{
 
-    max-width:86%;
+    max-width:88%;
 
     padding:16px 18px;
 
-    margin-bottom:16px;
-
     border-radius:22px;
+
+    margin-bottom:16px;
 
     line-height:1.7;
 
     font-size:15px;
 
-    animation:fadeUp .22s ease;
+    animation:fadeUp .2s ease;
 }
 
 
@@ -235,18 +194,14 @@ body{
 
 .bot-message{
 
-    background:
-    rgba(255,255,255,.88);
+    background:#fff;
 
-    border:
-    1px solid rgba(255,255,255,.7);
-
-    color:#2c2c2c;
-
-    box-shadow:
-    0 8px 20px rgba(0,0,0,.05);
+    color:#333;
 
     border-top-left-radius:8px;
+
+    box-shadow:
+    0 6px 18px rgba(0,0,0,.05);
 }
 
 
@@ -266,10 +221,10 @@ body{
 
     color:#fff;
 
-    box-shadow:
-    0 10px 22px rgba(31,143,69,.18);
-
     border-bottom-right-radius:8px;
+
+    box-shadow:
+    0 10px 22px rgba(31,143,69,.15);
 }
 
 
@@ -283,13 +238,6 @@ body{
     font-weight:700;
 
     text-decoration:none;
-
-    word-break:break-word;
-}
-
-.bot-message a:hover{
-
-    text-decoration:underline;
 }
 
 
@@ -300,45 +248,13 @@ body{
 
 .typing{
 
-    background:
-    rgba(255,255,255,.9);
+    width:max-content;
+
+    background:#fff;
 
     color:#666;
 
     border-top-left-radius:8px;
-
-    width:max-content;
-
-    display:flex;
-    align-items:center;
-
-    gap:10px;
-}
-
-.typing-dots{
-
-    display:flex;
-    gap:5px;
-}
-
-.typing-dots span{
-
-    width:8px;
-    height:8px;
-
-    border-radius:50%;
-
-    background:#72bf7d;
-
-    animation:bounce 1.2s infinite;
-}
-
-.typing-dots span:nth-child(2){
-    animation-delay:.2s;
-}
-
-.typing-dots span:nth-child(3){
-    animation-delay:.4s;
 }
 
 
@@ -349,66 +265,59 @@ body{
 
 .input-area{
 
-    padding:18px;
+    padding:14px;
 
-    background:
-    rgba(255,255,255,.88);
-
-    backdrop-filter:blur(12px);
+    background:#fff;
 
     border-top:
-    1px solid rgba(0,0,0,.05);
+    1px solid rgba(0,0,0,.06);
 
     display:flex;
 
-    gap:12px;
-}
+    align-items:center;
 
-.input-wrapper{
-
-    flex:1;
-
-    position:relative;
+    gap:10px;
 }
 
 .input-area input{
 
-    width:100%;
+    flex:1;
+
+    height:52px;
 
     border:none;
 
     outline:none;
 
-    padding:16px 18px;
-
     border-radius:18px;
 
+    background:#f3f5f3;
+
+    padding:0 18px;
+
     font-size:15px;
-
-    background:#f5f7f5;
-
-    transition:.2s;
 }
 
 .input-area input:focus{
-
-    background:#fff;
 
     box-shadow:
     0 0 0 4px rgba(31,143,69,.12);
 }
 
-
-
-/* botão */
-
 .input-area button{
+
+    width:54px;
+    height:54px;
 
     border:none;
 
-    min-width:58px;
-
     border-radius:18px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    font-size:22px;
 
     background:
     linear-gradient(
@@ -417,31 +326,21 @@ body{
         #59c36a
     );
 
-    color:#fff;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    padding:0 20px;
+    box-shadow:
+    0 10px 20px rgba(31,143,69,.18);
 
     transition:.2s;
-
-    box-shadow:
-    0 10px 22px rgba(31,143,69,.18);
 }
 
 .input-area button:hover{
 
     transform:translateY(-2px);
-
-    opacity:.96;
 }
 
 
 
 /* =========================================
-   ANIMAÇÕES
+   ANIMATION
 ========================================= */
 
 @keyframes fadeUp{
@@ -457,21 +356,6 @@ body{
     }
 }
 
-@keyframes bounce{
-
-    0%,
-    80%,
-    100%{
-        transform:scale(0.7);
-        opacity:.5;
-    }
-
-    40%{
-        transform:scale(1);
-        opacity:1;
-    }
-}
-
 
 
 /* =========================================
@@ -482,57 +366,34 @@ body{
 
     .header{
 
-        padding:0 16px;
-
         height:72px;
+
+        padding:0 14px;
     }
 
-    .header h1{
+    .title h1{
 
-        font-size:20px;
-    }
-
-    .header span{
-
-        font-size:12px;
-    }
-
-    .logo{
-
-        width:42px;
-        height:42px;
+        font-size:17px;
     }
 
     .messages{
 
-        padding:18px 14px 30px;
+        padding:14px;
     }
 
     .bot-message,
-    .user-message,
-    .typing{
+    .user-message{
 
-        max-width:94%;
+        max-width:95%;
 
         font-size:14px;
-
-        padding:14px 16px;
     }
 
     .input-area{
 
-        padding:12px;
+        padding:10px;
     }
 
-    .input-area input{
-
-        padding:14px 16px;
-    }
-
-    .input-area button{
-
-        min-width:52px;
-    }
 }
 
 </style>
@@ -555,11 +416,11 @@ body{
                 🤖
             </div>
 
-            <div>
+            <div class="title">
 
-                <h1>UFCBA Assistente Virtual</h1>
+                <h1>Freguesia 24H</h1>
 
-                <span>União das Freguesias de Coja e Barril de Alva</span>
+                <span>Apoio digital UFCBA</span>
 
             </div>
 
@@ -577,24 +438,24 @@ body{
 
 
 
-    <!-- MENSAGENS -->
+    <!-- MESSAGES -->
 
     <div class="messages" id="messages">
 
         <div class="bot-message">
-            👋 Olá! Sou o assistente virtual da UFCBA.
+
+            👋 Olá! Sou o assistente digital da UFCBA.
+
             <br><br>
+
             Posso ajudar com:
-            <br>
-            • Contactos
-            <br>
-            • Serviços online
-            <br>
-            • Eventos e notícias
-            <br>
-            • Apoio ao cidadão
-            <br>
-            • Informações da freguesia
+
+            <br>• Contactos
+            <br>• Serviços online
+            <br>• Eventos e notícias
+            <br>• Apoio ao cidadão
+            <br>• Informações da freguesia
+
         </div>
 
     </div>
@@ -605,15 +466,11 @@ body{
 
     <div class="input-area">
 
-        <div class="input-wrapper">
-
-            <input
-                type="text"
-                id="userInput"
-                placeholder="Escreva a sua mensagem..."
-            >
-
-        </div>
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Escreva a sua mensagem..."
+        >
 
         <button onclick="sendMessage()">
             ➜
@@ -647,6 +504,8 @@ async function sendMessage(){
 
     if(!text) return;
 
+
+
     const messages =
     document.getElementById("messages");
 
@@ -665,14 +524,18 @@ async function sendMessage(){
 
     messages.appendChild(userDiv);
 
+
+
     input.value = "";
+
+
 
     messages.scrollTop =
     messages.scrollHeight;
 
 
 
-    /* TYPING */
+    /* typing */
 
     const typingDiv =
     document.createElement("div");
@@ -680,16 +543,12 @@ async function sendMessage(){
     typingDiv.className =
     "typing";
 
-    typingDiv.innerHTML = `
-        <div class="typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        UFCBA AI está a escrever...
-    `;
+    typingDiv.innerText =
+    "Freguesia 24H está a escrever...";
 
     messages.appendChild(typingDiv);
+
+
 
     messages.scrollTop =
     messages.scrollHeight;
@@ -711,6 +570,8 @@ async function sendMessage(){
                 message:text
             })
         });
+
+
 
         const data =
         await response.json();
@@ -737,6 +598,8 @@ async function sendMessage(){
     catch(error){
 
         typingDiv.remove();
+
+
 
         const erroDiv =
         document.createElement("div");
