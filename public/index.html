@@ -8,11 +8,6 @@
 
 <title>Freguesia 24H</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
 
 *{
@@ -29,11 +24,13 @@ body{
 
     overflow:hidden;
 
-    font-family:'Inter',sans-serif;
+    font-family:
+    Inter,
+    Arial,
+    sans-serif;
 
     background:#f5f7f5;
 }
-
 
 
 /* =========================================
@@ -43,14 +40,13 @@ body{
 .chat-container{
 
     width:100%;
-    height:100%;
+    height:100vh;
 
     display:flex;
     flex-direction:column;
 
-    background:#f7faf7;
+    background:#f5f7f5;
 }
-
 
 
 /* =========================================
@@ -64,9 +60,11 @@ body{
     background:
     linear-gradient(
         135deg,
-        #1f8f45,
-        #59c36a
+        #239548,
+        #5dc96f
     );
+
+    color:white;
 
     display:flex;
     align-items:center;
@@ -74,11 +72,12 @@ body{
 
     padding:0 18px;
 
-    color:#fff;
+    flex-shrink:0;
 
     box-shadow:
-    0 8px 30px rgba(31,143,69,.18);
+    0 10px 30px rgba(0,0,0,.12);
 }
+
 
 .header-left{
 
@@ -88,39 +87,47 @@ body{
     gap:12px;
 }
 
-.logo{
+
+.bot-avatar{
 
     width:48px;
     height:48px;
 
-    border-radius:14px;
+    border-radius:16px;
 
     background:
-    rgba(255,255,255,.18);
+    rgba(255,255,255,.16);
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    font-size:24px;
+    font-size:26px;
+
+    backdrop-filter:blur(10px);
 }
 
-.title h1{
+
+.header-text h1{
 
     font-size:18px;
-    font-weight:800;
+    font-weight:700;
 
     line-height:1.1;
 }
 
-.title span{
 
-    font-size:12px;
+.header-text p{
+
+    font-size:14px;
 
     opacity:.92;
+
+    margin-top:2px;
 }
 
-.status{
+
+.online{
 
     display:flex;
     align-items:center;
@@ -128,27 +135,26 @@ body{
     gap:8px;
 
     font-size:14px;
-
     font-weight:600;
 }
 
-.status-dot{
+
+.online-dot{
 
     width:10px;
     height:10px;
 
     border-radius:50%;
 
-    background:#9fffab;
+    background:#d7ffd8;
 
     box-shadow:
-    0 0 10px #9fffab;
+    0 0 12px rgba(255,255,255,.9);
 }
 
 
-
 /* =========================================
-   MESSAGES
+   MENSAGENS
 ========================================= */
 
 .messages{
@@ -159,103 +165,80 @@ body{
 
     padding:18px;
 
-    background:#f5f7f5;
+    display:flex;
+    flex-direction:column;
+
+    gap:14px;
 }
 
 
+/* mensagem bot */
 
-/* =========================================
-   BUBBLES
-========================================= */
+.bot-message{
 
-.bot-message,
-.user-message,
-.typing{
+    background:white;
 
-    max-width:88%;
+    padding:18px;
+
+    border-radius:22px;
+
+    max-width:92%;
+
+    line-height:1.7;
+
+    color:#2a2a2a;
+
+    box-shadow:
+    0 8px 22px rgba(0,0,0,.05);
+}
+
+
+/* mensagem user */
+
+.user-message{
+
+    background:
+    linear-gradient(
+        135deg,
+        #239548,
+        #4dbd63
+    );
+
+    color:white;
 
     padding:16px 18px;
 
     border-radius:22px;
 
-    margin-bottom:16px;
-
-    line-height:1.7;
-
-    font-size:15px;
-
-    animation:fadeUp .2s ease;
-}
-
-
-
-/* bot */
-
-.bot-message{
-
-    background:#fff;
-
-    color:#333;
-
-    border-top-left-radius:8px;
-
-    box-shadow:
-    0 6px 18px rgba(0,0,0,.05);
-}
-
-
-
-/* user */
-
-.user-message{
-
     margin-left:auto;
 
-    background:
-    linear-gradient(
-        135deg,
-        #1f8f45,
-        #59c36a
-    );
+    max-width:88%;
 
-    color:#fff;
-
-    border-bottom-right-radius:8px;
+    line-height:1.6;
 
     box-shadow:
-    0 10px 22px rgba(31,143,69,.15);
+    0 8px 22px rgba(0,0,0,.10);
 }
-
 
 
 /* links */
 
 .bot-message a{
 
-    color:#1f8f45;
+    color:#239548;
+
+    text-decoration:none;
 
     font-weight:700;
 
-    text-decoration:none;
+    word-break:break-word;
 }
 
 
+.bot-message a:hover{
 
-/* =========================================
-   TYPING
-========================================= */
-
-.typing{
-
-    width:max-content;
-
-    background:#fff;
-
-    color:#666;
-
-    border-top-left-radius:8px;
+    text-decoration:underline;
 }
-
 
 
 /* =========================================
@@ -264,97 +247,109 @@ body{
 
 .input-area{
 
-    padding:14px;
+    padding:16px;
 
-    background:#fff;
+    background:white;
 
     border-top:
     1px solid rgba(0,0,0,.06);
 
     display:flex;
 
-    align-items:center;
-
     gap:10px;
+
+    flex-shrink:0;
 }
+
 
 .input-area input{
 
     flex:1;
 
-    height:52px;
+    height:54px;
 
     border:none;
 
-    outline:none;
+    background:#f1f3f2;
 
     border-radius:18px;
-
-    background:#f3f5f3;
 
     padding:0 18px;
 
     font-size:15px;
+
+    outline:none;
 }
 
-.input-area input:focus{
-
-    box-shadow:
-    0 0 0 4px rgba(31,143,69,.12);
-}
 
 .input-area button{
 
-    width:54px;
+    width:58px;
     height:54px;
 
     border:none;
 
     border-radius:18px;
 
-    cursor:pointer;
-
-    color:#fff;
-
-    font-size:22px;
-
     background:
     linear-gradient(
         135deg,
-        #1f8f45,
-        #59c36a
+        #239548,
+        #4dbd63
     );
 
-    box-shadow:
-    0 10px 20px rgba(31,143,69,.18);
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
 
     transition:.2s;
 }
 
+
 .input-area button:hover{
 
-    transform:translateY(-2px);
+    transform:scale(1.04);
 }
-
 
 
 /* =========================================
-   ANIMATION
+   TYPING
 ========================================= */
 
-@keyframes fadeUp{
+.typing{
 
-    from{
-        opacity:0;
-        transform:translateY(8px);
-    }
+    background:white;
 
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    padding:16px;
+
+    border-radius:20px;
+
+    width:max-content;
+
+    color:#666;
+
+    font-style:italic;
+
+    animation:pulse 1s infinite;
 }
 
+
+@keyframes pulse{
+
+    0%{
+        opacity:.45;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:.45;
+    }
+}
 
 
 /* =========================================
@@ -365,14 +360,19 @@ body{
 
     .header{
 
-        height:72px;
+        height:74px;
 
         padding:0 14px;
     }
 
-    .title h1{
+    .header-text h1{
 
         font-size:17px;
+    }
+
+    .header-text p{
+
+        font-size:13px;
     }
 
     .messages{
@@ -380,17 +380,9 @@ body{
         padding:14px;
     }
 
-    .bot-message,
-    .user-message{
-
-        max-width:95%;
-
-        font-size:14px;
-    }
-
     .input-area{
 
-        padding:10px;
+        padding:12px;
     }
 
 }
@@ -403,31 +395,27 @@ body{
 
 <div class="chat-container">
 
-
-
-    <!-- HEADER -->
-
     <div class="header">
 
         <div class="header-left">
 
-            <div class="logo">
+            <div class="bot-avatar">
                 🤖
             </div>
 
-            <div class="title">
+            <div class="header-text">
 
                 <h1>Freguesia 24H</h1>
 
-                <span>Apoio digital UFCBA</span>
+                <p>Apoio digital UFCBA</p>
 
             </div>
 
         </div>
 
-        <div class="status">
+        <div class="online">
 
-            <div class="status-dot"></div>
+            <div class="online-dot"></div>
 
             Online
 
@@ -436,32 +424,24 @@ body{
     </div>
 
 
-
-    <!-- MESSAGES -->
-
     <div class="messages" id="messages">
 
         <div class="bot-message">
 
-            👋 Olá! Sou o assistente digital da UFCBA.
+            👋 Olá! Sou o assistente digital da UFCBA.<br><br>
 
-            <br><br>
+            Posso ajudar com:<br>
 
-            Posso ajudar com:
-
-            <br>• Contactos
-            <br>• Serviços online
-            <br>• Eventos e notícias
-            <br>• Apoio ao cidadão
-            <br>• Informações da freguesia
+            • Contactos<br>
+            • Serviços online<br>
+            • Eventos e notícias<br>
+            • Apoio ao cidadão<br>
+            • Informações da freguesia
 
         </div>
 
     </div>
 
-
-
-    <!-- INPUT -->
 
     <div class="input-area">
 
@@ -480,7 +460,6 @@ body{
 </div>
 
 
-
 <script>
 
 function formatarLinks(texto){
@@ -490,7 +469,6 @@ function formatarLinks(texto){
         '<a href="$1" target="_blank">$1</a>'
     );
 }
-
 
 
 async function sendMessage(){
@@ -503,14 +481,11 @@ async function sendMessage(){
 
     if(!text) return;
 
-
-
     const messages =
     document.getElementById("messages");
 
 
-
-    /* USER */
+    // mensagem user
 
     const userDiv =
     document.createElement("div");
@@ -523,18 +498,13 @@ async function sendMessage(){
 
     messages.appendChild(userDiv);
 
-
-
     input.value = "";
-
-
 
     messages.scrollTop =
     messages.scrollHeight;
 
 
-
-    /* typing */
+    // typing
 
     const typingDiv =
     document.createElement("div");
@@ -543,15 +513,12 @@ async function sendMessage(){
     "typing";
 
     typingDiv.innerText =
-    "Freguesia 24H está a escrever...";
+    "A escrever...";
 
     messages.appendChild(typingDiv);
 
-
-
     messages.scrollTop =
     messages.scrollHeight;
-
 
 
     try{
@@ -570,16 +537,10 @@ async function sendMessage(){
             })
         });
 
-
-
         const data =
         await response.json();
 
-
-
         typingDiv.remove();
-
-
 
         const botDiv =
         document.createElement("div");
@@ -598,29 +559,24 @@ async function sendMessage(){
 
         typingDiv.remove();
 
-
-
         const erroDiv =
         document.createElement("div");
 
         erroDiv.className =
         "bot-message";
 
-        erroDiv.innerHTML =
-        "⚠️ Erro ao contactar o servidor.";
+        erroDiv.innerText =
+        "Erro ao contactar o servidor.";
 
         messages.appendChild(erroDiv);
     }
-
-
 
     messages.scrollTop =
     messages.scrollHeight;
 }
 
 
-
-/* ENTER */
+/* enter */
 
 document
 .getElementById("userInput")
@@ -636,3 +592,4 @@ document
 </script>
 
 </body>
+</html>
