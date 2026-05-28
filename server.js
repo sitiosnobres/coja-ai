@@ -72,7 +72,6 @@ ${item.snippet}
         // PÁGINAS IMPORTANTES
         const paginas = [
             "https://www.cojaebarrildealva.pt/",
-            "https://www.cojaebarrildealva.pt/pin/",
             "https://www.cojaebarrildealva.pt/assembleia-de-freguesia/",
             "https://www.cojaebarrildealva.pt/concursos-contratacao-publica/",
             "https://www.jfcojaturismo.pt/",
