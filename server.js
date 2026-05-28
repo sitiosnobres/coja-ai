@@ -221,20 +221,21 @@ ${config.links.atas}
     });
 
 }
+const perguntaNormalizada = pergunta
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
 // OCORRÊNCIAS
 if (
-    pergunta.includes("ocorrencia") ||
-    pergunta.includes("ocorrências") ||
-    pergunta.includes("ocorrencias") ||
-    pergunta.includes("buraco") ||
-    pergunta.includes("iluminacao") ||
-    pergunta.includes("iluminação") ||
-    pergunta.includes("limpeza") ||
-    pergunta.includes("agua") ||
-    pergunta.includes("água") ||
-    pergunta.includes("saneamento") ||
-    pergunta.includes("estrada") ||
-    pergunta.includes("lixo")
+    perguntaNormalizada.includes("ocorrencia") ||
+    perguntaNormalizada.includes("buraco") ||
+    perguntaNormalizada.includes("iluminacao") ||
+    perguntaNormalizada.includes("limpeza") ||
+    perguntaNormalizada.includes("agua") ||
+    perguntaNormalizada.includes("saneamento") ||
+    perguntaNormalizada.includes("estrada") ||
+    perguntaNormalizada.includes("lixo")
 ) {
 
     return res.json({
@@ -248,7 +249,6 @@ Através desta plataforma podes enviar fotografias, localização e acompanhar o
     });
 
 }
-
 // EDITAIS
 if (
     pergunta.includes("edital") ||
