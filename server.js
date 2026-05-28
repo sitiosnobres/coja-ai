@@ -72,7 +72,7 @@ ${item.snippet}
         // PÁGINAS IMPORTANTES
         const paginas = [
             "https://www.cojaebarrildealva.pt/",
-            "https://www.cojaebarrildealva.pt/portal-de-turismo/",
+            "https://www.jfcojaturismo.pt/",
             "https://www.cojaebarrildealva.pt/category/noticias/",
             "https://www.cojaebarrildealva.pt/publicacoes-oficiais/",
             "https://www.cojaebarrildealva.pt/espaco-do-cidadao/",
