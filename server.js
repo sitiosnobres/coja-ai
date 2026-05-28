@@ -221,6 +221,33 @@ ${config.links.atas}
     });
 
 }
+// OCORRÊNCIAS
+if (
+    pergunta.includes("ocorrencia") ||
+    pergunta.includes("ocorrências") ||
+    pergunta.includes("ocorrencias") ||
+    pergunta.includes("buraco") ||
+    pergunta.includes("iluminacao") ||
+    pergunta.includes("iluminação") ||
+    pergunta.includes("limpeza") ||
+    pergunta.includes("agua") ||
+    pergunta.includes("água") ||
+    pergunta.includes("saneamento") ||
+    pergunta.includes("estrada") ||
+    pergunta.includes("lixo")
+) {
+
+    return res.json({
+        reply: `
+Podes comunicar ocorrências da freguesia aqui:
+
+https://www.cojaebarrildealva.pt/pin/
+
+Através desta plataforma podes enviar fotografias, localização e acompanhar o estado da ocorrência.
+`
+    });
+
+}
 
 // EDITAIS
 if (
